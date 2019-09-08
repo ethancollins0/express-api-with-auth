@@ -7,16 +7,6 @@ function isUsernameAvailable(username){
     return db('users').where({username: username})
 }
 
-function checkUsernames(username, taken){
-    let available = true
-    taken.forEach(user => {
-        if (user.username == username){
-            available = false
-        }
-    })
-    return available
-}
-
 function getUsernames() {
     return db.select('username').from('users')
 }
@@ -33,6 +23,13 @@ function getUserId(username){
     return db('users').where('username', username).first()
 }
 
+function testTimeout(){
+    const test = []
+    return getUserId('test')
+        .then(id => test.push(id))
+        .then(test)
+}
+
 
 module.exports = {
     getUsernames,
@@ -42,6 +39,8 @@ module.exports = {
     getUserId,
 }
 
+testTimeout()
+    .then(response => console.log(`The response was ${response}`))
 /*
 const test = []
 
