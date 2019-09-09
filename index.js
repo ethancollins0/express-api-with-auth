@@ -3,6 +3,7 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 const db = require('./database_connection')
 const bcrypt = require('bcrypt')
+const spotify = require('./spotify')
 
 const app = express()
 app.use(cors())
@@ -10,6 +11,10 @@ app.use(bodyParser())
 
 app.get('/', (req, res) => {
     res.send('working')
+})
+
+app.get('/spotify/topsongs', (req, res) => {
+    spotify.getSongs()
 })
 
 app.post('/register', (req, res) => { //params name, username, and password
@@ -33,8 +38,8 @@ app.post('/login', (req, res) => { //params username and password
             if (user) {
                 bcrypt.compare(req.body.password, user.password, (error, success) => {
                     if (success){
-                        db.getUserId(req.body.username)
-                            .then(user => res.status(200).json(user.id))
+                        db.getBooks(req.body.username)
+                            .then(books => res.status(200).json(books))
                     } else {
                         res.json('failure')
                     }
