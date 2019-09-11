@@ -6,6 +6,6 @@ exports.up = function(knex) {
         t.string('password');
     })
 };
-
+ 
 exports.down = function(knex) {
 };

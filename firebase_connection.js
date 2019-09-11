@@ -18,6 +18,8 @@ const config = {
 firebase.initializeApp(config);
 // Get a reference to the database service
 
+let number = 0;
+
 function seedItems() {
     firebase.database().ref('/').orderByChild('tradeable_on_ge').startAt(true).once('value').then((snapshot) => {
             snapshot.forEach(doc => {
@@ -51,7 +53,13 @@ function insertItem(item){
                                 weight: item.weight,
                                 wiki_name: item.wiki_name,
                                 wiki_url: item.wiki_url
-                            }).then(console.log('works'))
+                            }).then(console.log)
+
+                        number += 1;
 }
 
-seedItems()
+// seedItems()
+
+// setTimeout(() => {
+//     console.log(number)
+// }, 30000)
