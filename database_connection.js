@@ -1,4 +1,8 @@
 require('dotenv').config()
+const fetch = require('node-fetch')
+const osrs = require('osrs-wrapper')
+
+let ge_items_array = []
 
 const configuration = require('./knexfile')['development']
 const db = require('knex')(configuration)
@@ -27,23 +31,62 @@ function getUserId(username){
     return db('users').where('username', username).first()
 }
 
-function testTimeout(){
-    const test = []
-    return getUserId('test')
-        .then(id => test.push(id))
-        .then(test)
+function sendPrices(){
+    return db.column('id').select().from('items')
+        .then(items => items)
 }
 
-function getBooks(username){
-    return getUserId(username).then(user => {
-        return db('books').where('user_id', user.id)
-    })
+function findItemById(id){
+    return db('items').where('id', id).first()
 }
 
-function getSongs(username){
-    return getUserId(username).then(user => {
-        return db('songs').where('user_id', user.id)
+function findItemByDbId(db_id){
+    return db('items').where('db_id', db_id).first()
+}
+
+function getRandomItem(){
+    return db('items').count().first()
+        .then(object => {
+            let randomId = Math.floor(Math.random() * (object.count - 0));
+            return randomId
+        })
+}
+
+
+function addRandomItem(username){
+    getUserId(username)
+        .then(user => {
+            getRandomItem()
+                .then(item_id => {
+                    findItemByDbId(item_id)
+                        .then(item => {
+                            return db('user_items').insert({user_id: user.id, item_id: item.db_id})
+                        })
+                })
+        })
+}
+
+function getUserItemIds(username){
+    return getUserId(username)
+        .then(user => user.id)
+        .then(id => {
+            return db('user_items').where('user_id', id)
+        })
+}
+
+function getUserItems(username){
+    return getUserItemIds(username)
+        .then(items => getUserItemsById(items))
+        .then(resp => resp)
+}
+    
+function getUserItemsById(itemArray){
+    let db_id_array = []
+    itemArray.forEach(item => {
+        db_id_array.push(item.item_id)
     })
+
+    return db('items').whereIn('db_id', db_id_array)
 }
 
 module.exports = {
@@ -53,9 +96,28 @@ module.exports = {
     login,
     getUserId,
     getSeedUserId,
-    getBooks,
-    getSongs,
+    sendPrices,
+    findItemById,
+    getRandomItem,
+    findItemByDbId,
+    getUserItems,
 }
+
+getUserItems('username')
+    .then(console.log)
+
+
+
+// saveUserItem('username', 'me')
+// for (let i = 0; i < 10; i++){     add 10 random items to the default seed user
+//     addRandomItem('username')
+// }
+
+
+
+
+
+
 
 /*
 const test = []

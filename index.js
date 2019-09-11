@@ -3,18 +3,25 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 const db = require('./database_connection')
 const bcrypt = require('bcrypt')
-const spotify = require('./spotify')
 
 const app = express()
 app.use(cors())
 app.use(bodyParser())
 
 app.get('/', (req, res) => {
-    res.send('working')
 })
 
-app.get('/spotify/topsongs', (req, res) => {
-    spotify.getSongs()
+app.get('/item/random', (req, res) => {
+    db.getRandomItem()
+        .then(id => {
+            db.findItemByDbId(id)
+                .then(item => res.send(item))
+        })
+})
+
+app.get('/item/:id', (req, res) => {
+    db.findItemById(req.params.id)
+        .then(object => res.send(object))
 })
 
 app.post('/register', (req, res) => { //params name, username, and password
@@ -32,14 +39,18 @@ db.isUsernameAvailable(req.body.username)
     })
 })
 
+app.delete('/delete', (req, req) => {
+    
+})
+
 app.post('/login', (req, res) => { //params username and password
     db.login(req.body.username)
         .then(user => {
             if (user) {
                 bcrypt.compare(req.body.password, user.password, (error, success) => {
                     if (success){
-                        db.getSongs(req.body.username)
-                            .then(songs => res.status(200).json(songs))
+                        db.getUserItems(req.body.username)
+                            .then(items => res.send(items))
                     } else {
                         res.json('failure')
                     }
