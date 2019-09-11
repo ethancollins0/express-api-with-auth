@@ -40,8 +40,11 @@ function getBooks(username){
     })
 }
 
-getBooks('username').then(console.log)
-
+function getSongs(username){
+    return getUserId(username).then(user => {
+        return db('songs').where('user_id', user.id)
+    })
+}
 
 module.exports = {
     getUsernames,
@@ -51,10 +54,8 @@ module.exports = {
     getUserId,
     getSeedUserId,
     getBooks,
+    getSongs,
 }
-
-testTimeout()
-    .then(response => console.log(`The response was ${response}`))
 
 /*
 const test = []

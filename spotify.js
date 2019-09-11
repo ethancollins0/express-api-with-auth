@@ -1,3 +1,5 @@
+const fetch = require('node-fetch')
+
 function getSongs(){
     
 }
@@ -11,9 +13,7 @@ function getToken(){
             'Content-Type': 'application/json',
             'Authorization': 'Basic OWMwMzQ0ZWNlNWZiNDMzOWFhNzlkMzg4MWFlY2U3YWM6MGY5M2Q4Y2VhMGIzNDU4Nzk2ZGVkNjhjZjMzYzYzMmQ='
         },
-        body: {
-            'grant_type': 'client_credentials'
-        }
+        body: JSON.stringify({grant_type: 'client_credentials'})
     }).then(resp => resp.json())
     .then(console.log)
 }

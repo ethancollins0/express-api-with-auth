@@ -38,8 +38,8 @@ app.post('/login', (req, res) => { //params username and password
             if (user) {
                 bcrypt.compare(req.body.password, user.password, (error, success) => {
                     if (success){
-                        db.getBooks(req.body.username)
-                            .then(books => res.status(200).json(books))
+                        db.getSongs(req.body.username)
+                            .then(songs => res.status(200).json(songs))
                     } else {
                         res.json('failure')
                     }
