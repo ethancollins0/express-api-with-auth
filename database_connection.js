@@ -7,6 +7,10 @@ function isUsernameAvailable(username){
     return db('users').where({username: username})
 }
 
+function getSeedUserId(){
+    return db('users').orderBy('id').limit(1).then(user => user[0].id)
+}
+
 function getUsernames() {
     return db.select('username').from('users')
 }
@@ -30,6 +34,17 @@ function testTimeout(){
         .then(test)
 }
 
+function getBooks(username){
+    return getUserId(username).then(user => {
+        return db('books').where('user_id', user.id)
+    })
+}
+
+function getSongs(username){
+    return getUserId(username).then(user => {
+        return db('songs').where('user_id', user.id)
+    })
+}
 
 module.exports = {
     getUsernames,
@@ -37,10 +52,11 @@ module.exports = {
     isUsernameAvailable,
     login,
     getUserId,
+    getSeedUserId,
+    getBooks,
+    getSongs,
 }
 
-testTimeout()
-    .then(response => console.log(`The response was ${response}`))
 /*
 const test = []
 
@@ -50,4 +66,3 @@ db('users').where('name', 'e').pluck('password')
         console.log(test)
     })
 */
-
