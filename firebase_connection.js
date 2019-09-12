@@ -52,7 +52,9 @@ function insertItem(item){
                                 tradeable_on_ge: item.tradeable_on_ge,
                                 weight: item.weight,
                                 wiki_name: item.wiki_name,
-                                wiki_url: item.wiki_url
+                                wiki_url: item.wiki_url,
+                                image_url: `http://services.runescape.com/m=itemdb_oldschool/1568023265322_obj_big.gif?id=${item.id}`,
+                                updated_price: '0'
                             }).then(console.log)
 
                         number += 1;

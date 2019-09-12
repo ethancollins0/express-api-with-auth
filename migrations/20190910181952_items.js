@@ -25,7 +25,9 @@ exports.up = function(knex) {
         t.boolean('tradeable_on_ge'),
         t.float('weight'),
         t.string('wiki_name'),
-        t.string('wiki_url')
+        t.string('wiki_url'),
+        t.string('image_url'),
+        t.string('updated_price')
       })
 };
 

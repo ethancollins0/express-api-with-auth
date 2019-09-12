@@ -3,6 +3,7 @@ exports.up = function(knex) {
         t.increments('id'),
         t.bigInteger('user_id').references('id').inTable('users')
         t.bigInteger('item_id').references('db_id').inTable('items')
+        t.string('updated_price')
       })
 }; 
 

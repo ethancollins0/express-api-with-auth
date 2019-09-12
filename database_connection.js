@@ -1,6 +1,4 @@
 require('dotenv').config()
-const fetch = require('node-fetch')
-const osrs = require('osrs-wrapper')
 
 let ge_items_array = []
 
@@ -103,15 +101,8 @@ module.exports = {
     getUserItems,
 }
 
-getUserItems('username')
-    .then(console.log)
+// db('items').count().then(console.log)
 
-
-
-// saveUserItem('username', 'me')
-// for (let i = 0; i < 10; i++){     add 10 random items to the default seed user
-//     addRandomItem('username')
-// }
 
 
 

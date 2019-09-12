@@ -3,6 +3,8 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 const db = require('./database_connection')
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
+let scraper = require('./scraper')
 
 const app = express()
 app.use(cors())
@@ -39,8 +41,17 @@ db.isUsernameAvailable(req.body.username)
     })
 })
 
-app.delete('/delete', (req, req) => {
-    
+app.post('/item/price/', (req, res) => {
+    setTimeout(() => {
+        scraper.getPriceByName(req.body.name)
+        .then(price => {
+            console.log(req.body.num)
+            typeof price == 'string'
+                ? res.json(price)
+                : res.send('failed to find or fetch item')
+        })
+        .catch(error => res.send('failed to find or fetch item'))
+    }, req.body.num * 1000)
 })
 
 app.post('/login', (req, res) => { //params username and password
@@ -49,6 +60,16 @@ app.post('/login', (req, res) => { //params username and password
             if (user) {
                 bcrypt.compare(req.body.password, user.password, (error, success) => {
                     if (success){
+                        const JWTTOKEN = jwt.sign({
+                            username: req.body.username
+                        },
+                        'secret',
+                        {
+                            expiresIn: '1h'
+                        });
+                        
+
+
                         db.getUserItems(req.body.username)
                             .then(items => res.send(items))
                     } else {
