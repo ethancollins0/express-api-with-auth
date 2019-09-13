@@ -12,13 +12,13 @@ let database_methods = require('./database_connection')
         
 //     })
 
-for (let id = 1; id <= 3651; id++){
-    db('items').where('db_id', id).first()
-        .then(item => {
-            db('items').where('db_id', id).first().update({image_url: `https://github.com/osrsbox/osrsbox-db/blob/master/docs/items-icons/${item.id}.png?raw=true`})
-                .then(console.log(`updated ${id}`))
-        })
-    }
+// for (let id = 1; id <= 3651; id++){
+//     db('items').where('db_id', id).first()
+//         .then(item => {
+//             db('items').where('db_id', id).first().update({image_url: `https://github.com/osrsbox/osrsbox-db/blob/master/docs/items-icons/${item.id}.png?raw=true`})
+//                 .then(console.log(`updated ${id}`))
+//         })
+//     }
 // db('items').where('db_id', 2000).first()
 //     .then(item => {
 //         console.log(item.id)

@@ -53,14 +53,14 @@ function insertItem(item){
                                 weight: item.weight,
                                 wiki_name: item.wiki_name,
                                 wiki_url: item.wiki_url,
-                                image_url: `http://services.runescape.com/m=itemdb_oldschool/1568023265322_obj_big.gif?id=${item.id}`,
+                                image_url: `https://github.com/osrsbox/osrsbox-db/blob/master/docs/items-icons/${item.id}.png?raw=true`,
                                 updated_price: '0'
                             }).then(console.log)
 
                         number += 1;
 }
 
-// seedItems()
+seedItems()
 
 // setTimeout(() => {
 //     console.log(number)

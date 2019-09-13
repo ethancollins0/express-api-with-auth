@@ -87,6 +87,26 @@ function getUserItemsById(itemArray){
     return db('items').whereIn('db_id', db_id_array)
 }
 
+function saveItem(object){
+    let {username, id} = object
+    return getUserId(username)
+        .then(user => {
+            findItemById(id)
+                .then(item => {
+                    return db('user_items').insert({user_id: user.id, item_id: item.db_id})
+                })
+        })
+}
+
+function deleteUserItem(object){
+    let {db_id, username} = object
+
+    return getUserId(username)
+        .then(user => {
+            return db('user_items').where('user_id', user.id).andWhere('item_id', db_id).del()
+        })
+}
+
 module.exports = {
     getUsernames,
     addUser,
@@ -99,11 +119,15 @@ module.exports = {
     getRandomItem,
     findItemByDbId,
     getUserItems,
+    deleteUserItem,
+    saveItem,
 }
 
 // db('items').count().then(console.log)
 
-
+// for(let i = 0; i < 5; i++){ //seed some items for the user
+//     addRandomItem('username')
+// }
 
 
 

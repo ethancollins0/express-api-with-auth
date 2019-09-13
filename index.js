@@ -5,6 +5,7 @@ const db = require('./database_connection')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 let scraper = require('./scraper')
+let scraper_update = require('./current_item_prices')
 
 const app = express()
 app.use(cors())
@@ -26,6 +27,23 @@ app.get('/item/:id', (req, res) => {
         .then(object => res.send(object))
 })
 
+app.post('/item/update', (req, res) => {
+    scraper_update.getItemThenUpdate(req.body.db_id)
+        .then(item => {
+            console.log(item)
+            res.json({"updated_price": item[0].updated_price})
+        })
+        .catch(() => {
+            res.json('failed')
+        })
+})
+
+app.post('/item/delete', (req, res) => {
+    db.deleteUserItem(req.body)
+        .then(console.log)
+    res.json('deleted')
+})
+
 app.post('/register', (req, res) => { //params name, username, and password
 db.isUsernameAvailable(req.body.username)
     .then(list => {
@@ -39,6 +57,16 @@ db.isUsernameAvailable(req.body.username)
             res.json(`Congrats ${req.body.name}, you sucessfully made an account with username: ${req.body.username}`)
         }
     })
+})
+
+app.post('/item/save', (req, res) => {
+    db.saveItem(req.body)
+    
+    db.findItemById(req.body.id)
+        .then(item => res.json(item))
+        .catch(() => {
+            res.json('problems')
+        })
 })
 
 app.post('/item/price/', (req, res) => {
@@ -67,9 +95,6 @@ app.post('/login', (req, res) => { //params username and password
                         {
                             expiresIn: '1h'
                         });
-                        
-
-
                         db.getUserItems(req.body.username)
                             .then(items => res.send(items))
                     } else {
